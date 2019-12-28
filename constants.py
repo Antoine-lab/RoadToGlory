@@ -30,7 +30,7 @@ rows = int(SCREEN_HEIGHT/HEIGHT)
 grid = []
 
 
-# How many monsters we want to create
+# How many monsters we want
 
 LEVEL = 1
 
