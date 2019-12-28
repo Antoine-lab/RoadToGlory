@@ -13,14 +13,15 @@ class maps():
         self.row = row
         self.posx = col*32
         self.posy = row*32
-        
+        self.count = 0
         self.neighbors = []
+        self.image = pygame.image.load("sprites/test01.png")
         self.wall = False
         self.optimal = 0
 
         # Setting random walls(change value between 0 to 1)
-        # if(random()<0.3):
-        # self.wall=True
+##        if(random()<0.3):
+##            self.wall=True
 
     def draw(self,color):
        pygame.draw.rect(screen,(color),[WIDTH*self.col,HEIGHT*self.row,WIDTH,HEIGHT])
@@ -34,7 +35,7 @@ class maps():
             lol = self.image.subsurface(land)
             
         screen.blit(lol,(self.posx,self.posy))
-
+        
     def addNeighbors(self,cell):
         i = self.col
         j = self.row
