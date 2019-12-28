@@ -79,10 +79,38 @@ while game:
                     Player1.Fy = Player1.posy
                 else:
                     Player1.posy = Player1.Fy
+            #Putting blocks        
+            elif keys[pygame.K_e]:
+                X = Player1.posx//32
+                Y = Player1.posy//32
+                if Player1.position == 2:
+                    grid[X+1][Y].wall = True
+                if Player1.position == 1:
+                    grid[X-1][Y].wall = True
+                if Player1.position == 3:
+                    grid[X][Y-1].wall = True
+                if Player1.position == 0:
+                    grid[X][Y+1].wall = True
+                block = blockInit()
+            #Remove blocks
+            elif keys[pygame.K_r]:
+                X = Player1.posx//32
+                Y = Player1.posy//32
+                if Player1.position == 2:
+                    grid[X+1][Y].wall = False
+                if Player1.position == 1:
+                    grid[X-1][Y].wall = False
+                if Player1.position == 3:
+                    grid[X][Y-1].wall = False
+                if Player1.position == 0:
+                    grid[X][Y+1].wall = False
+                block = blockInit()
             Player1.set_crop_image(Player1.image,(96,0,32,32))
     # Render the map
     screen.fill(WHITE)
-    
+    for column in range(cols):
+        for row in range(rows):
+            grid[column][row].render(screen)
     # Update and blit the player
     if Player1.life > 0:
         screen.blit(Player1.get_crop_image(),(Player1.getposx(),Player1.getposy()))
