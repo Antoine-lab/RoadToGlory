@@ -9,10 +9,11 @@ class maps():
         self.f = 0
         self.g = 0
         self.h = 0
-        self.posx = 0
-        self.posy = 0
         self.col = col
         self.row = row
+        self.posx = col*32
+        self.posy = row*32
+        
         self.neighbors = []
         self.wall = False
         self.optimal = 0
@@ -24,6 +25,15 @@ class maps():
     def draw(self,color):
        pygame.draw.rect(screen,(color),[WIDTH*self.col,HEIGHT*self.row,WIDTH,HEIGHT])
     
+    def render(self,screen):
+        land = (0,0,32,32)
+        rock = (32,0,32,32)
+        if self.wall:
+            lol = self.image.subsurface(rock)
+        else:
+            lol = self.image.subsurface(land)
+            
+        screen.blit(lol,(self.posx,self.posy))
 
     def addNeighbors(self,cell):
         i = self.col
