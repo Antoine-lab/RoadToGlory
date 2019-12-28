@@ -11,12 +11,11 @@ from character import *
 from maps import *
 
 # Initializing pygame
-
 pygame.init()
 pygame.key.set_repeat(1,50)
 mapInit()
 block = blockInit()
-
+clock = pygame.time.Clock()
 
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -93,7 +92,7 @@ while game:
         screen.blit(gameO,(0,0))
 
     pygame.display.update()
-
+    clock.tick(FPS)
     
 
 
