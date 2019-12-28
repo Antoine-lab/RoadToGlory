@@ -18,8 +18,8 @@ class maps():
         self.optimal = 0
 
         # Setting random walls(change value between 0 to 1)
-        if(random()<0.3):
-            self.wall=True
+        # if(random()<0.3):
+        # self.wall=True
 
     def draw(self,color):
        pygame.draw.rect(screen,(color),[WIDTH*self.col,HEIGHT*self.row,WIDTH,HEIGHT])
