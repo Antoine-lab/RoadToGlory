@@ -55,7 +55,7 @@ while game:
             if keys[pygame.K_SPACE]:
                 pass
 ##                damaged_monsters_id = Player1.attack(Monsters,damaged_monsters_id)
-            elif keys[pygame.K_RIGHT]:
+            if keys[pygame.K_RIGHT]:
                 Player1.position = 2
                 Player1.Fx += move
                 if (Player1.get_Frect().collidelist(block)) != -1 or Player1.Fx>(SCREEN_WIDTH-WIDTH):
@@ -101,27 +101,52 @@ while game:
             elif keys[pygame.K_r]:
                 X = Player1.posx//32
                 Y = Player1.posy//32
-                if Player1.position == 2:
+                if Player1.position == 2 and grid[X+1][Y].wall == True:
                     grid[X+1][Y].count +=1
                     if grid[X+1][Y].count == 5:
                         grid[X+1][Y].wall = False
                         grid[X+1][Y].count = 0
-                if Player1.position == 1:
+                        if grid[X+1][Y].rock:
+                            Player1.stones += grid[X+1][Y].materials
+                        else:
+                            Player1.woods += grid[X+1][Y].materials
+                            
+                if Player1.position == 1 and grid[X-1][Y].wall == True:
                     grid[X-1][Y].count +=1
                     if grid[X-1][Y].count == 5:
                         grid[X-1][Y].wall = False
                         grid[X-1][Y].count = 0
-                if Player1.position == 3:
+                        if grid[X-1][Y].rock:
+                            Player1.stones += grid[X+1][Y].materials
+                        else:
+                            Player1.woods += grid[X+1][Y].materials
+                            
+                if Player1.position == 3 and grid[X][Y-1].wall == True:
                     grid[X][Y-1].count +=1
                     if grid[X][Y-1].count == 5:
                         grid[X][Y-1].wall = False
                         grid[X][Y-1].count = 0
-                if Player1.position == 0:
+                        if grid[X][Y-1].rock:
+                            Player1.stones += grid[X+1][Y].materials
+                        else:
+                            Player1.woods += grid[X+1][Y].materials
+                            
+                if Player1.position == 0 and grid[X][Y+1].wall == True:
                     grid[X][Y+1].count +=1
                     if grid[X][Y+1].count == 5:
                         grid[X][Y+1].wall = False
                         grid[X][Y+1].count = 0
+                        if grid[X][Y+1].rock:
+                            Player1.stones += grid[X+1][Y].materials
+                        else:
+                            Player1.woods += grid[X+1][Y].materials
+                            
                 block = blockInit()
+                
+            elif keys[pygame.K_t]:
+                print("Stones : ",Player1.stones)
+                print("Woods : ",Player1.woods)
+                
             Player1.set_crop_image(Player1.image,(96,0,32,32))
     # Render the map
     
@@ -132,7 +157,6 @@ while game:
             grid[column][row].render(screen)
             
     Player1.update(screen)
-    # Update the NPC
     
     for key,value in NPC.items():
         value.update(screen)
