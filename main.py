@@ -44,7 +44,6 @@ for j in range(i+1,MONSTERS_NUMBERS + i + 1):
 
 
 
-
 game = True
 while game:
     for event in pygame.event.get():
@@ -110,6 +109,8 @@ while game:
                             Player1.stones += grid[X+1][Y].materials
                         else:
                             Player1.woods += grid[X+1][Y].materials
+                        reSpawnList.append(grid[X+1][Y])
+                        reSpawnList[-1].count = -5
                             
                 if Player1.position == 1 and grid[X-1][Y].wall == True:
                     grid[X-1][Y].count +=1
@@ -117,9 +118,11 @@ while game:
                         grid[X-1][Y].wall = False
                         grid[X-1][Y].count = 0
                         if grid[X-1][Y].rock:
-                            Player1.stones += grid[X+1][Y].materials
+                            Player1.stones += grid[X-1][Y].materials
                         else:
-                            Player1.woods += grid[X+1][Y].materials
+                            Player1.woods += grid[X-1][Y].materials
+                        reSpawnList.append(grid[X-1][Y])
+                        reSpawnList[-1].count = -5
                             
                 if Player1.position == 3 and grid[X][Y-1].wall == True:
                     grid[X][Y-1].count +=1
@@ -127,25 +130,28 @@ while game:
                         grid[X][Y-1].wall = False
                         grid[X][Y-1].count = 0
                         if grid[X][Y-1].rock:
-                            Player1.stones += grid[X+1][Y].materials
+                            Player1.stones += grid[X][Y-1].materials
                         else:
-                            Player1.woods += grid[X+1][Y].materials
-                            
+                            Player1.woods += grid[X][Y-1].materials
+                        reSpawnList.append(grid[X][Y-1])
+                        reSpawnList[-1].count = -5
                 if Player1.position == 0 and grid[X][Y+1].wall == True:
                     grid[X][Y+1].count +=1
                     if grid[X][Y+1].count == 5:
                         grid[X][Y+1].wall = False
                         grid[X][Y+1].count = 0
                         if grid[X][Y+1].rock:
-                            Player1.stones += grid[X+1][Y].materials
+                            Player1.stones += grid[X][Y+1].materials
                         else:
-                            Player1.woods += grid[X+1][Y].materials
-                            
+                            Player1.woods += grid[X][Y+1].materials
+                        reSpawnList.append(grid[X][Y+1])
+                        reSpawnList[-1].count = -5
                 block = blockInit()
                 
             elif keys[pygame.K_t]:
                 print("Stones : ",Player1.stones)
                 print("Woods : ",Player1.woods)
+
                 
             Player1.set_crop_image(Player1.image,(96,0,32,32))
     # Render the map
@@ -155,6 +161,15 @@ while game:
     for column in range(cols):
         for row in range(rows):
             grid[column][row].render(screen)
+    # ReSpawn destroyed blocks
+    for item in reSpawnList:
+        item.count +=1
+        if item.count == 30:
+            item.wall = True
+            item.count = 0
+            block = blockInit()
+            reSpawnList.remove(item)
+            
             
     Player1.update(screen)
     
