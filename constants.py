@@ -28,7 +28,7 @@ WIDTH = HEIGHT = move = 32
 cols = int(SCREEN_WIDTH/WIDTH)
 rows = int(SCREEN_HEIGHT/HEIGHT)
 grid = []
-
+reSpawnList=[]
 
 # How many monsters we want to create
 
