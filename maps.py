@@ -1,5 +1,5 @@
 import pygame
-from random import random
+from random import *
 from constants import *
 
 
@@ -17,20 +17,32 @@ class maps():
         self.neighbors = []
         self.image = pygame.image.load("sprites/test01.png")
         self.wall = False
+        self.rock = False
+        self.tree = False
         self.optimal = 0
+        self.materials = randint(0,300)
 
         # Setting random walls(change value between 0 to 1)
-##        if(random()<0.3):
-##            self.wall=True
-
+        if(random()<0.1):
+            self.wall=True
+        if self.wall:
+            if(random()<0.5):
+                self.rock = True
+            else:
+                self.tree = True
+                
     def draw(self,color):
        pygame.draw.rect(screen,(color),[WIDTH*self.col,HEIGHT*self.row,WIDTH,HEIGHT])
     
     def render(self,screen):
         land = (0,0,32,32)
         rock = (32,0,32,32)
+        tree = (64,0,32,32)
         if self.wall:
-            lol = self.image.subsurface(rock)
+            if self.rock:
+                lol = self.image.subsurface(rock)
+            else:
+                lol = self.image.subsurface(tree)
         else:
             lol = self.image.subsurface(land)
             
