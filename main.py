@@ -44,6 +44,7 @@ for j in range(i+1,MONSTERS_NUMBERS + i + 1):
 
 
 
+
 game = True
 while game:
     for event in pygame.event.get():
@@ -154,23 +155,12 @@ while game:
 
                 
             Player1.set_crop_image(Player1.image,(96,0,32,32))
+            
     # Render the map
-    
-    screen.fill(WHITE)
+    mapping(grid,screen)
+    # ReSpawn destroyed blocks (method in maps.py)
+    reSpawning(reSpawnList)
     # Update the player
-    for column in range(cols):
-        for row in range(rows):
-            grid[column][row].render(screen)
-    # ReSpawn destroyed blocks
-    for item in reSpawnList:
-        item.count +=1
-        if item.count == 30: # change this number to increase or decrease cooldown
-            item.wall = True
-            item.count = 0
-            block = blockInit()
-            reSpawnList.remove(item)
-            
-            
     Player1.update(screen)
     
     for key,value in NPC.items():
