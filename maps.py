@@ -4,7 +4,7 @@ from constants import *
 
 
 class maps():
-
+    """ Regroup all the setting of the map/grid """
     def __init__(self,col,row):
         self.f = 0
         self.g = 0
@@ -92,12 +92,14 @@ def blockInit():
     return blockList
 
 def mapping(grid,screen):
+    """ Render the map's sprites """
     screen.fill(WHITE)
     for column in range(cols):
         for row in range(rows):
             grid[column][row].render(screen)
             
 def reSpawning(itemList):
+    """ Respawn destroyed blocks """
     for item in itemList:
         item.count +=1
         if item.count == 30: # change this number to increase or decrease cooldown
@@ -106,13 +108,14 @@ def reSpawning(itemList):
             block = blockInit()
             reSpawnList.remove(item)
 
-# Heuristics = distance between current position to the target's position
+
 def heuristics(a,b):
+    """ Heuristics = distance between current position to the target's position """
     dist = abs(a.col-b.col)+ abs(a.row-b.row)
     return int(dist)
 
 def aStar(start,end):
-
+    """ aStar algorithm """
     #openSet is a list of node that need to be check in priority
     openSet = []
     #closedSet is a list of node that have been checked
