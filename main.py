@@ -44,9 +44,9 @@ for j in range(i+1,MONSTERS_NUMBERS + i + 1):
 
 
 
-
 game = True
 while game:
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
@@ -153,19 +153,20 @@ while game:
                 print("Stones : ",Player1.stones)
                 print("Woods : ",Player1.woods)
 
-                
-            Player1.set_crop_image(Player1.image,(96,0,32,32))
-            
+             
     # Render the map
     mapping(grid,screen)
     # ReSpawn destroyed blocks (method in maps.py)
     reSpawning(reSpawnList)
     # Update the player
+    Player1.set_crop_image(Player1.image,(96,0,32,32))      
+    Player1.animation = (Player1.animation + 1)%3
     Player1.update(screen)
     
+
     for key,value in NPC.items():
         value.update(screen)
-    
+
     pygame.display.update()
     clock.tick(FPS)
     
