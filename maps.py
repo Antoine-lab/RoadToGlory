@@ -48,6 +48,7 @@ class maps():
             
         screen.blit(lol,(self.posx,self.posy))
         
+        
     def addNeighbors(self,cell):
         i = self.col
         j = self.row
@@ -90,6 +91,20 @@ def blockInit():
 
     return blockList
 
+def mapping(grid,screen):
+    screen.fill(WHITE)
+    for column in range(cols):
+        for row in range(rows):
+            grid[column][row].render(screen)
+            
+def reSpawning(itemList):
+    for item in itemList:
+        item.count +=1
+        if item.count == 30: # change this number to increase or decrease cooldown
+            item.wall = True
+            item.count = 0
+            block = blockInit()
+            reSpawnList.remove(item)
 
 # Heuristics = distance between current position to the target's position
 def heuristics(a,b):
