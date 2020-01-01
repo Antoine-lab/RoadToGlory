@@ -21,11 +21,10 @@ class Character(object):
     def set_crop_image(self,image,rect = (0,0,32,32)):
         """ the method takes a rectangle by default (0,128,32,32), gets the sprite in the form
         of a double list [x][y] and use the crop image """
-
         tempo2 = self.getsprite(rect)
         tempo = tempo2[self.position][self.animation]    # [0][0] is bottom, [1][0]is left etc.
         self.crop_image = self.image.subsurface(tempo)
-
+    
 
     def get_crop_image(self):
         return self.crop_image
@@ -75,27 +74,26 @@ class Player(Character):
         self.stones = 0
         self.woods = 0
         
-    def attack(self,monsters_dict,damaged_monsters_id):
+    def attack(self,monsters_dict):
         """ the method takes as input the monster dictionnary and check the position
         of each monster in order to attack the monster nearby """
         for key,value in monsters_dict.items():
             if self.position == 1: # 0 being bottom, 1 left, 2 right, and 3 top
                 if ((self.posx // 32) - 1) == (value.posx // 32):
                     if (self.posy // 32) == (value.posy // 32):
-                        damaged_monsters_id.append(key)
+                        value.life -= 10
             if self.position == 0:
                 if (self.posx // 32) == (value.posx // 32):
                     if ((self.posy // 32) + 1) == (value.posy // 32):
-                        damaged_monsters_id.append(key)
+                        value.life -= 10
             if self.position == 2:
                 if (((self.posx + 32)// 32)) == (value.posx // 32):
                     if (self.posy // 32) == (value.posy // 32):
-                        damaged_monsters_id.append(key)
+                        value.life -= 10
             if self.position == 3:
                 if (self.posx // 32) == (value.posx // 32):
                     if ((self.posy // 32) - 1) == (value.posy // 32):
-                        damaged_monsters_id.append(key)
-        return damaged_monsters_id
+                        value.life -= 10
     
     def update(self,screen):
         if self.life > 0:
@@ -129,8 +127,11 @@ class Animals(Character):
             self.draw_stats(screen)
         if self.life <= 0:
             self.dead = True
-            
+    def move(self,player):
+        pass
 
+    def attack(self,player):
+        pass
             
         
        
@@ -145,26 +146,42 @@ class Monsters(Character):
         self.state = 'Angry'
         self.damaged = False
         self.dead = False
+        self.speed = 7
+        self.counter = 1
     def get_state(self):
         return self.state
     def set_state(self,state):
         self.state = state
+    def move(self,player):
+        """ this method makes the monsters attack the player if they are angry """
+        if self.state == 'Angry' and self.dead == False:
+            if self.counter == 7:
+                if abs(self.posx - player.posx) >32 :
+                    if self.posx - player.posx > 32 and  grid[int(self.posx/32)-1][int(self.posy/32)].wall != True and (SCREEN_WIDTH>self.posx>=0):
+                        self.posx = self.posx - 32
+                    if player.posx - self.posx > 32 and grid[int(self.posx/32)+1][int(self.posy/32)].wall != True and (SCREEN_WIDTH>self.posx>=0):
+                        self.posx = self.posx + 32
+                if abs(self.posy - player.posy) >32:
+                    if self.posy - player.posy > 32 and  grid[int(self.posx/32)][int(self.posy/32)-1].wall != True and (SCREEN_HEIGHT>self.posy>=0):
+                        self.posy = self.posy - 32
+                    if player.posy - self.posy > 32 and grid[int(self.posx/32)][int(self.posy/32)+1].wall != True and (SCREEN_HEIGHT>self.posy>=0):
+                        self.posy = self.posy + 32
+                self.counter = 1
+            elif self.counter < 7:
+                self.counter += 1
     def attack(self,player):
-        if self.state == 'Angry':
-            if abs(self.posx - player.posx) >32 :
-                if self.posx - player.posx > 32 and  grid[int(self.posx/32)-1][int(self.posy/32)].wall != True and (SCREEN_WIDTH>self.posx>=0):
-                    self.posx = self.posx - 32
-                if player.posx - self.posx > 32 and grid[int(self.posx/32)+1][int(self.posy/32)].wall != True and (SCREEN_WIDTH>self.posx>=0):
-                    self.posx = self.posx + 32
-            if abs(self.posy - player.posy) >32:
-                if self.posy - player.posy > 32 and  grid[int(self.posx/32)][int(self.posy/32)-1].wall != True and (SCREEN_HEIGHT>self.posy>=0):
-                    self.posy = self.posy - 32
-                if player.posy - self.posy > 32 and grid[int(self.posx/32)][int(self.posy/32)+1].wall != True and (SCREEN_HEIGHT>self.posy>=0):
-                    self.posy = self.posy + 32
+        if self.dead == False:
             if abs(self.posy - player.posy) <=32 and abs(self.posx - player.posx) <=32 and player.life > 0:
-                player.life -= 5
+                if self.counter == 7:
+                    player.life -= 5
+                    self.counter = 1
+                elif self.counter < 7:
+                    self.counter += 1
+        
 
     def update(self,screen):
         if self.dead == False:
             screen.blit(self.get_crop_image(),(self.getposx(),self.getposy()))
             self.draw_stats(screen)
+        if self.life <= 0:
+            self.dead = True
