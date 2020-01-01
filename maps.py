@@ -105,7 +105,6 @@ def reSpawning(itemList):
         if item.count == 30: # change this number to increase or decrease cooldown
             item.wall = True
             item.count = 0
-            block = blockInit()
             reSpawnList.remove(item)
 
 
