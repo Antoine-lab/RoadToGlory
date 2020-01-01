@@ -12,6 +12,7 @@ class Character(object):
         self.id = id_character
         self.life = 100
         self.position = 0 # it is the initial position of the sprite with 0 being bottom, 1 left, 2 right, and 3 top
+        self.animation = 0
         
     def set_sprite(self,image):
         """ The method takes the link such as '002.png' and loads it """
@@ -20,10 +21,11 @@ class Character(object):
     def set_crop_image(self,image,rect = (0,0,32,32)):
         """ the method takes a rectangle by default (0,128,32,32), gets the sprite in the form
         of a double list [x][y] and use the crop image """
+
         tempo2 = self.getsprite(rect)
-        tempo = tempo2[self.position][0]    # [0][0] is bottom, [1][0]is left etc.
+        tempo = tempo2[self.position][self.animation]    # [0][0] is bottom, [1][0]is left etc.
         self.crop_image = self.image.subsurface(tempo)
-    
+
 
     def get_crop_image(self):
         return self.crop_image
